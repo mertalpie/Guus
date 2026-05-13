@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontdek Matches | WonenZonderGrenzen</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', 'sans-serif'],
+                        display: ['"Cormorant Garamond"', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#0D1B2A',
+                            sand: '#C8A97A',
+                            white: '#FAFAF8',
+                            gray: '#F0EFEA',
+                            text: '#2C3E50',
+                            success: '#2E7D32',
+                            accent: '#E67E22'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(13, 27, 42, 0.08)',
+                        'card': '0 4px 20px -2px rgba(13, 27, 42, 0.05)',
+                        'glow': '0 0 20px rgba(200, 169, 122, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FAFAF8; }
+        
+        /* Glassmorphism Nav */
+        .glass-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(250, 250, 248, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 0.5px solid rgba(13, 27, 42, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 3rem;
+            transition: padding 0.3s ease;
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+        .glass-nav.scrolled .glass-nav-container { padding: 0.85rem 3rem; }
+        .nav-link {
+            font-family: 'DM Sans', sans-serif;
+            color: #7A7A72;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover, .nav-link.active { color: #0D1B2A; }
+
+        /* Map & Nodes Styles */
+        .match-map {
+            position: relative;
+            background-color: #0D1B2A;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(13, 27, 42, 0.3);
+        }
+        /* City map overlay background */
+        .map-bg {
+            position: absolute;
+            inset: 0;
+            opacity: 0.15;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 100 100"><path d="M10 10h80v80h-80z" fill="none" stroke="%23fff" stroke-width="0.5"/><path d="M20 10v80M40 10v80M60 10v80M80 10v80M10 20h80M10 40h80M10 60h80M10 80h80" fill="none" stroke="%23fff" stroke-width="0.2"/></svg>');
+            background-size: 100px 100px;
+        }
+        .svg-lines {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .connection-line {
+            stroke: rgba(200, 169, 122, 0.2);
+            stroke-width: 2;
+            stroke-dasharray: 4 4;
+            transition: stroke 0.4s ease, stroke-width 0.4s ease;
+        }
+        .connection-line.active {
+            stroke: rgba(200, 169, 122, 0.8);
+            stroke-width: 3;
+            stroke-dasharray: none;
+            animation: pulse-line 2s infinite;
+        }
+        @keyframes pulse-line {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        .map-node {
+            position: absolute;
+            z-index: 20;
+            transform: translate(-50%, -50%);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .map-node .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 3px solid #0D1B2A;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            filter: grayscale(80%) opacity(0.7);
+        }
+        .map-node.active .avatar, .map-node:hover .avatar {
+            border-color: #C8A97A;
+            box-shadow: 0 0 20px rgba(200, 169, 122, 0.6);
+            transform: scale(1.1);
+            filter: grayscale(0%) opacity(1);
+        }
+        .node-label {
+            background: rgba(13, 27, 42, 0.8);
+            backdrop-filter: blur(4px);
+            color: #FAFAF8;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: -10px;
+            z-index: 21;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border: 1px solid rgba(250, 250, 248, 0.1);
+        }
+        .map-node.active .node-label, .map-node:hover .node-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .node-you {
+            z-index: 30;
+        }
+        .node-you .avatar {
+            width: 64px;
+            height: 64px;
+            border-color: #FAFAF8;
+            filter: none;
+            box-shadow: 0 0 30px rgba(250, 250, 248, 0.3);
+        }
+
+        /* Float Animations */
+        .float-1 { animation: float 6s ease-in-out infinite; }
+        .float-2 { animation: float 7s ease-in-out infinite 1s; }
+        .float-3 { animation: float 5s ease-in-out infinite 2s; }
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) translateY(0px); }
+            50% { transform: translate(-50%, -50%) translateY(-10px); }
+            100% { transform: translate(-50%, -50%) translateY(0px); }
+        }
+
+        /* Interest Cards */
+        .interest-card {
+            background-color: #FAFAF8;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 700;
+            color: #2C3E50;
+        }
+        .interest-card:hover {
+            border-color: #C8A97A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(200, 169, 122, 0.15);
+        }
+        .interest-card.active {
+            background-color: #0D1B2A;
+            color: #FAFAF8;
+            border-color: #0D1B2A;
+            box-shadow: 0 8px 20px rgba(13, 27, 42, 0.2);
+        }
+
+        /* Match Cards Scroll */
+        .match-cards-container {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 20px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .match-cards-container::-webkit-scrollbar { display: none; }
+        .match-mini-card {
+            min-width: 260px;
+            background: rgba(250, 250, 248, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(250, 250, 248, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            scroll-snap-align: start;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .match-mini-card:hover {
+            background: rgba(250, 250, 248, 0.1);
+            border-color: rgba(200, 169, 122, 0.4);
+        }
+
+    </style>
+</head>
+<body class="font-sans text-brand-text pt-24 pb-20">
+
+    <!-- Navigation -->
+    <nav class="glass-nav" id="main-nav">
+        <div class="glass-nav-container">
+            <a href="index.html" class="font-display font-bold text-3xl tracking-tight" style="color: #0D1B2A;">WonenZonderGrenzen<span style="color: #C8A97A;">.</span></a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="matching.html" class="nav-link active">Ontdek</a>
+                <a href="dashboard.html" class="nav-link">Dual-Dashboard</a>
+                <a href="community-chat.html" class="nav-link flex items-center gap-1">
+                    <svg class="w-4 h-4 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    Community
+                </a>
+            </div>
+            <div class="flex items-center gap-3">
+                <img src="assets/user_profile_1_1778678260407.png" class="w-10 h-10 rounded-full object-cover border-2 border-brand-sand">
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <header class="mb-12 text-center max-w-3xl mx-auto">
+            <h1 class="font-display text-4xl lg:text-5xl font-bold text-brand-navy mb-4">Smart Matching Engine</h1>
+            <p class="text-lg text-gray-500">Selecteer hieronder je interesses om je community te ontdekken en de perfecte long-stay woning te vinden.</p>
+        </header>
+
+        <!-- The Community Section (WonenZonderGrenzen Style) -->
+        <section class="matching-section flex flex-col lg:flex-row gap-8 mb-20">
+            
+            <!-- Left: Interests Grid -->
+            <div class="lg:w-1/3 flex flex-col gap-6">
+                <h3 class="font-display text-2xl font-bold text-brand-navy">Je Interesses</h3>
+                
+                <div class="grid grid-cols-2 gap-3" id="interests-grid">
+                    <div class="interest-card" data-interest="voetbal" onclick="toggleInterest(this)">
+                        <span class="text-xl">⚽</span> Voetbal
+                    </div>
+                    <div class="interest-card" data-interest="basketbal" onclick="toggleInterest(this)">
+                        <span class="text-xl">🏀</span> Basketbal
+                    </div>
+                    <div class="interest-card" data-interest="clubs" onclick="toggleInterest(this)">
+                        <span class="text-xl">💃</span> Uitgaan
+                    </div>
+                    <div class="interest-card" data-interest="padel" onclick="toggleInterest(this)">
+                        <span class="text-xl">🎾</span> Padel
+                    </div>
+                    <div class="interest-card" data-interest="sights" onclick="toggleInterest(this)">
+                        <span class="text-xl">🏛️</span> Sights
+                    </div>
+                    <div class="interest-card" data-interest="wine" onclick="toggleInterest(this)">
+                        <span class="text-xl">🍷</span> Wijn proeven
+                    </div>
+                    <div class="interest-card" data-interest="gaming" onclick="toggleInterest(this)">
+                        <span class="text-xl">🎮</span> Gaming
+                    </div>
+                    <div class="interest-card" data-interest="tech" onclick="toggleInterest(this)">
+                        <span class="text-xl">💻</span> Tech
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-6 bg-brand-gray rounded-xl border border-gray-200">
+                    <p class="text-sm text-gray-600 mb-4"><strong>Tip:</strong> Klik op meerdere interesses om de kaart interactief te zien updaten met nieuwe matches in de buurt.</p>
+                    <button class="w-full bg-brand-navy text-white py-3 rounded-xl font-bold hover:bg-opacity-90 shadow-md">
+                        Toon 14 Locaties
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Match Map -->
+            <div class="lg:w-2/3 h-[600px] match-map flex flex-col">
+                <div class="map-bg"></div>
+                
+                <!-- SVG Lines Container -->
+                <svg class="svg-lines" id="lines-container">
+                    <!-- Lines generated by JS -->
+                </svg>
+
+                <div class="flex-1 relative w-full h-full" id="nodes-container">
+                    <!-- YOU Node (Center) -->
+                    <div class="map-node node-you" style="left: 50%; top: 40%;">
+                        <img src="assets/user_profile_1_1778678260407.png" class="avatar">
+                        <div class="node-label !opacity-100 !transform-none bg-brand-sand border-brand-sand !text-brand-navy">Jij</div>
+                    </div>
+                    
+                    <!-- 8 Generated Nodes -->
+                    <!-- 1. Elena -->
+                    <div class="map-node float-1" data-interests="wine,sights,clubs" style="left: 20%; top: 25%;">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80" class="avatar">
+                        <div class="node-label">Elena V. · 96%</div>
+                    </div>
+                    <!-- 2. Lars -->
+                    <div class="map-node float-2" data-interests="padel,tech,voetbal" style="left: 75%; top: 15%;">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&q=80" class="avatar">
+                        <div class="node-label">Lars J. · 82%</div>
+                    </div>
+                    <!-- 3. Yuki -->
+                    <div class="map-node float-3" data-interests="gaming,tech" style="left: 85%; top: 50%;">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&q=80" class="avatar">
+                        <div class="node-label">Yuki T. · 89%</div>
+                    </div>
+                    <!-- 4. Marcos -->
+                    <div class="map-node float-1" data-interests="voetbal,padel,clubs" style="left: 30%; top: 60%;">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80" class="avatar">
+                        <div class="node-label">Marcos · 91%</div>
+                    </div>
+                    <!-- 5. Sarah -->
+                    <div class="map-node float-2" data-interests="wine,sights" style="left: 60%; top: 70%;">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&q=80" class="avatar">
+                        <div class="node-label">Sarah B. · 85%</div>
+                    </div>
+                    <!-- 6. David -->
+                    <div class="map-node float-3" data-interests="basketbal,tech" style="left: 15%; top: 45%;">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&q=80" class="avatar">
+                        <div class="node-label">David K. · 78%</div>
+                    </div>
+                    <!-- 7. Anna -->
+                    <div class="map-node float-1" data-interests="clubs,wine,padel" style="left: 45%; top: 15%;">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80" class="avatar">
+                        <div class="node-label">Anna P. · 94%</div>
+                    </div>
+                    <!-- 8. James -->
+                    <div class="map-node float-2" data-interests="gaming,voetbal" style="left: 80%; top: 75%;">
+                        <img src="https://images.unsplash.com/photo-1492562080023-ab3b95lz12?w=150&q=80" class="avatar">
+                        <div class="node-label">James W. · 88%</div>
+                    </div>
+                </div>
+
+                <!-- Match Mini Cards (Bottom of Map) -->
+                <div class="match-cards-container absolute bottom-0 left-0 w-full z-30 pb-4">
+                    <!-- Card 1 -->
+                    <div class="match-mini-card">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex gap-3 items-center">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80" class="w-10 h-10 rounded-full border border-gray-600">
+                                <div>
+                                    <h5 class="font-bold text-sm">Elena V.</h5>
+                                    <p class="text-xs text-brand-sand">Coliving Villa</p>
+                                </div>
+                            </div>
+                            <span class="bg-brand-success text-white text-[10px] font-bold px-2 py-1 rounded">96%</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="text-[10px] bg-white bg-opacity-10 px-2 py-1 rounded border border-white border-opacity-20">🍷 Wijn</span>
+                            <span class="text-[10px] bg-white bg-opacity-10 px-2 py-1 rounded border border-white border-opacity-20">🏛️ Sights</span>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="match-mini-card">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex gap-3 items-center">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&q=80" class="w-10 h-10 rounded-full border border-gray-600">
+                                <div>
+                                    <h5 class="font-bold text-sm">Lars J.</h5>
+                                    <p class="text-xs text-brand-sand">Expat Loft</p>
+                                </div>
+                            </div>
+                            <span class="bg-brand-success text-white text-[10px] font-bold px-2 py-1 rounded">82%</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="text-[10px] bg-brand-sand bg-opacity-20 text-brand-sand px-2 py-1 rounded border border-brand-sand border-opacity-50">🎾 Padel</span>
+                            <span class="text-[10px] bg-white bg-opacity-10 px-2 py-1 rounded border border-white border-opacity-20">💻 Tech</span>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="match-mini-card">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex gap-3 items-center">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80" class="w-10 h-10 rounded-full border border-gray-600">
+                                <div>
+                                    <h5 class="font-bold text-sm">Marcos</h5>
+                                    <p class="text-xs text-brand-sand">Buurtbewoner</p>
+                                </div>
+                            </div>
+                            <span class="bg-brand-success text-white text-[10px] font-bold px-2 py-1 rounded">91%</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="text-[10px] bg-brand-sand bg-opacity-20 text-brand-sand px-2 py-1 rounded border border-brand-sand border-opacity-50">⚽ Voetbal</span>
+                            <span class="text-[10px] bg-white bg-opacity-10 px-2 py-1 rounded border border-white border-opacity-20">💃 Clubs</span>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="match-mini-card">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex gap-3 items-center">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80" class="w-10 h-10 rounded-full border border-gray-600">
+                                <div>
+                                    <h5 class="font-bold text-sm">Anna P.</h5>
+                                    <p class="text-xs text-brand-sand">Coliving Hub</p>
+                                </div>
+                            </div>
+                            <span class="bg-brand-success text-white text-[10px] font-bold px-2 py-1 rounded">94%</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="text-[10px] bg-white bg-opacity-10 px-2 py-1 rounded border border-white border-opacity-20">💃 Clubs</span>
+                            <span class="text-[10px] bg-brand-sand bg-opacity-20 text-brand-sand px-2 py-1 rounded border border-brand-sand border-opacity-50">🎾 Padel</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script to handle Map Interactions -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // Navbar Shrink Effect
+            const nav = document.getElementById('main-nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 60) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            const nodesContainer = document.getElementById('nodes-container');
+            const linesContainer = document.getElementById('lines-container');
+            const nodes = document.querySelectorAll('.map-node:not(.node-you)');
+            const centerNode = document.querySelector('.node-you');
+            
+            // Function to draw SVG lines between Center Node and other nodes
+            function drawLines() {
+                linesContainer.innerHTML = ''; // Clear existing
+                
+                const centerRect = centerNode.getBoundingClientRect();
+                const containerRect = nodesContainer.getBoundingClientRect();
+                
+                const centerX = centerRect.left - containerRect.left + centerRect.width / 2;
+                const centerY = centerRect.top - containerRect.top + centerRect.height / 2;
+
+                nodes.forEach((node, index) => {
+                    const nodeRect = node.getBoundingClientRect();
+                    const nodeX = nodeRect.left - containerRect.left + nodeRect.width / 2;
+                    const nodeY = nodeRect.top - containerRect.top + nodeRect.height / 2;
+
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', centerX);
+                    line.setAttribute('y1', centerY);
+                    line.setAttribute('x2', nodeX);
+                    line.setAttribute('y2', nodeY);
+                    line.setAttribute('class', 'connection-line');
+                    line.setAttribute('data-node-index', index);
+                    
+                    linesContainer.appendChild(line);
+                });
+            }
+
+            // Draw initially
+            setTimeout(drawLines, 500); // Small delay to ensure layout is done
+            window.addEventListener('resize', drawLines);
+
+            // Global toggle Interest logic
+            window.toggleInterest = function(cardElement) {
+                cardElement.classList.toggle('active');
+                
+                // Get all active interests
+                const activeInterests = Array.from(document.querySelectorAll('.interest-card.active'))
+                                            .map(el => el.getAttribute('data-interest'));
+                
+                // Update Nodes and Lines
+                nodes.forEach((node, index) => {
+                    const nodeInterests = node.getAttribute('data-interests').split(',');
+                    const line = linesContainer.querySelector(`line[data-node-index="${index}"]`);
+                    
+                    // Check if node has ANY of the active interests
+                    const isMatch = activeInterests.some(ai => nodeInterests.includes(ai));
+                    
+                    if (isMatch || activeInterests.length === 0) {
+                        node.classList.add('active');
+                        if(line) line.classList.add('active');
+                    } else {
+                        node.classList.remove('active');
+                        if(line) line.classList.remove('active');
+                    }
+                    
+                    // If no interests selected, remove active states
+                    if(activeInterests.length === 0) {
+                        node.classList.remove('active');
+                        if(line) line.classList.remove('active');
+                    }
+                });
+            };
+            
+            // Random floating effect to lines
+            setInterval(drawLines, 50); // Continuously redraw lines as nodes float
+        });
+    </script>
+</body>
+</html>

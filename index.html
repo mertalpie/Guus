@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WonenZonderGrenzen | Premium Long Stay & Community Platform</title>
+    <meta name="description" content="WonenZonderGrenzen combines the efficiency of long-term rentals with an exclusive community vibe. Find your match, connect with locals, and safely sublet your home.">
+    
+    <!-- Google Fonts: Cormorant Garamond and DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', 'sans-serif'],
+                        display: ['"Cormorant Garamond"', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#0D1B2A',
+                            sand: '#C8A97A',
+                            white: '#FAFAF8',
+                            gray: '#F0EFEA',
+                            text: '#2C3E50',
+                            success: '#2E7D32',
+                        }
+                    },
+                    borderRadius: {
+                        'xl': '12px',
+                        '2xl': '16px',
+                        '3xl': '24px',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(13, 27, 42, 0.08)',
+                        'card': '0 4px 20px -2px rgba(13, 27, 42, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FAFAF8; }
+        /* Navigation Bar Styles */
+        .glass-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(250, 250, 248, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 0.5px solid rgba(13, 27, 42, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 3rem;
+            transition: padding 0.3s ease;
+            max-width: 80rem; /* max-w-7xl approx */
+            margin: 0 auto;
+        }
+        .glass-nav.scrolled .glass-nav-container {
+            padding: 0.85rem 3rem;
+        }
+        .nav-link {
+            font-family: 'DM Sans', sans-serif;
+            color: #7A7A72;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: #0D1B2A;
+        }
+        .nav-cta {
+            background-color: #0D1B2A;
+            color: #FFFFFF;
+            border-radius: 2px;
+            padding: 0.625rem 1.5rem;
+            font-family: 'DM Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: background-color 0.2s ease;
+        }
+        .nav-cta:hover {
+            background-color: #2C4A6E;
+        }
+        
+        /* Fade-in Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInAnim 0.6s ease-out forwards;
+        }
+        @keyframes fadeInAnim {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body class="font-sans text-brand-text antialiased">
+
+    <!-- Navigation -->
+    <nav class="glass-nav" id="main-nav">
+        <div class="glass-nav-container">
+            <!-- Logo -->
+            <div>
+                <a href="index.html" class="font-display font-bold text-3xl tracking-tight" style="color: #0D1B2A;">WonenZonderGrenzen<span style="color: #C8A97A;">.</span></a>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="matching.html" class="nav-link">Ontdek</a>
+                <a href="dashboard.html" class="nav-link">Dual-Dashboard</a>
+                <a href="community-chat.html" class="nav-link flex items-center gap-1">
+                    <svg class="w-4 h-4 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    Community
+                </a>
+                <div class="w-px h-5 bg-gray-300"></div>
+                <a href="#" class="nav-link">Inloggen</a>
+                <a href="#" class="nav-cta">Word lid</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-brand-gray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="max-w-2xl">
+                    <span class="inline-block py-1 px-3 rounded-full bg-white border border-brand-sand text-xs font-bold text-brand-navy mb-6 uppercase tracking-widest">
+                        Long Stay & Community Platform
+                    </span>
+                    <h1 class="font-display text-5xl lg:text-7xl font-bold text-brand-navy leading-tight mb-6">
+                        Woon overal.<br><span class="text-brand-sand italic">Voel je overal thuis.</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-8 max-w-lg leading-relaxed">
+                        Het exclusieve platform voor verblijven van 1+ maanden. Wij matchen je met high-end woningen en verbinden je proactief met buren die jouw passies delen. 
+                    </p>
+                    
+                    <div class="bg-white p-3 rounded-xl shadow-card flex flex-col sm:flex-row gap-3 max-w-xl">
+                        <div class="flex-1 relative">
+                            <input type="text" placeholder="Waar wil je wonen?" class="w-full pl-5 pr-4 py-3 rounded-xl bg-brand-gray border-none focus:ring-2 focus:ring-brand-sand outline-none font-bold text-brand-navy">
+                        </div>
+                        <a href="matching.html" class="bg-brand-navy text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition-colors flex items-center justify-center whitespace-nowrap">
+                            Vind Matches
+                        </a>
+                    </div>
+                    
+                    <div class="mt-10 flex items-center gap-6 text-sm font-bold text-gray-500">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-brand-sand" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Interesse Matching
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-brand-sand" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Geverifieerde Onderverhuur
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative hidden lg:block">
+                    <div class="absolute inset-0 bg-brand-sand rounded-3xl transform rotate-3 opacity-30"></div>
+                    <img src="assets/community_vibe_1778678245541.png" alt="Community gathering in a high-end kitchen" class="relative rounded-3xl shadow-soft object-cover h-[600px] w-full z-10">
+                    
+                    <!-- Floating UI Card -->
+                    <div class="absolute -bottom-8 -left-8 bg-white p-5 rounded-xl shadow-card z-20 flex items-center gap-4 animate-bounce" style="animation-duration: 3s;">
+                        <div class="flex -space-x-3">
+                            <img src="assets/user_profile_1_1778678260407.png" class="w-12 h-12 rounded-full border-2 border-white object-cover" alt="User">
+                            <img src="assets/user_profile_2_1778678273002.png" class="w-12 h-12 rounded-full border-2 border-white object-cover" alt="User">
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-brand-navy">3 Tech Founders</p>
+                            <p class="text-xs text-gray-500">Wonen in dit gebouw</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-display text-4xl lg:text-5xl font-bold text-brand-navy mb-4">Meer dan alleen een plek om te slapen</h2>
+                <p class="text-gray-500 text-lg">Wij lossen moderne eenzaamheid en leegstand op door slimme matching te combineren met veilige onderverhuur.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-10">
+                <!-- Feature 1 -->
+                <div class="p-8 rounded-xl bg-brand-gray border border-gray-200 hover:shadow-card transition-all">
+                    <div class="w-14 h-14 rounded-xl bg-brand-navy flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-brand-sand" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-brand-navy mb-3">Community-First</h3>
+                    <p class="text-gray-600">Ons algoritme verbindt je met wijken en co-living spaces waar mensen jouw interesses delen—van Padel tot Tech startups.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="p-8 rounded-xl bg-brand-gray border border-gray-200 hover:shadow-card transition-all">
+                    <div class="w-14 h-14 rounded-xl bg-brand-sand flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-brand-navy mb-3">Long Stay Focus</h3>
+                    <p class="text-gray-600">Exclusief voor verblijven van 1 maand of langer. Pak je koffers uit en word echt onderdeel van de lokale cultuur.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="p-8 rounded-xl bg-brand-gray border border-gray-200 hover:shadow-card transition-all">
+                    <div class="w-14 h-14 rounded-xl bg-brand-navy flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-brand-sand" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-brand-navy mb-3">Veilig Onderverhuren</h3>
+                    <p class="text-gray-600">Ga je naar het buitenland? Verhuur je eigen woning veilig via ons platform met geautomatiseerde goedkeuring van de verhuurder en premium verzekeringen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Locations (12 Items as requested) -->
+    <section class="py-24 bg-brand-gray bg-opacity-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="font-display text-4xl lg:text-5xl font-bold text-brand-navy mb-4">Geselecteerde Long Stays</h2>
+                    <p class="text-gray-500 text-lg">Zorgvuldig geselecteerde woningen met bruisende lokale communities wereldwijd.</p>
+                </div>
+                <a href="matching.html" class="hidden sm:flex items-center gap-2 text-brand-navy font-bold hover:text-brand-sand transition-colors">
+                    Bekijk alle <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+            </div>
+
+            <!-- LISTINGS GRID -->
+            <div class="listings-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Listing 1: Amsterdam -->
+                <div class="listing-card fade-in delay-1 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="assets/amsterdam_loft_1778678189921.png" alt="Amsterdam" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Amsterdam, NL</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.2</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Oud-Zuid</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Luxe Expat Loft</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Design</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Tech</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Kunst</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€2,400</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <img src="assets/user_profile_2_1778678273002.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+12</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 2: Lisbon -->
+                <div class="listing-card fade-in delay-2 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="assets/lisbon_coliving_1778678210298.png" alt="Lisbon" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Lisbon, PT</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.8</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Cais do Sodré</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">The Nomads Villa</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Tech</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Surfen</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Padel</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€1,200</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_2_1778678273002.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 3: Berlin -->
+                <div class="listing-card fade-in delay-3 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="assets/berlin_creative_1778678228698.png" alt="Berlin" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Berlin, DE</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.0</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Kreuzberg</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Kreuzberg Creatieve Space</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Design</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Muziek</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Kunst</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€1,850</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+8</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 4: Valencia -->
+                <div class="listing-card fade-in delay-1 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1542361345-89e58247f2d5?w=600&q=80" alt="Valencia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Valencia, ES</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.4</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Ruzafa</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Sunny Zeilers Appartement</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Design</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Zeilen</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Gastronomie</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€1,400</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_2_1778678273002.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+6</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 5: Cape Town -->
+                <div class="listing-card fade-in delay-2 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="assets/cape_town_coliving_1778680848392.png" alt="Cape Town" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Cape Town, SA</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.7</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Camps Bay</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Camps Bay Coliving</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Surfen</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Koffie</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Wandelen</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€900</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <img src="assets/user_profile_2_1778678273002.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+15</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 6: Antwerp -->
+                <div class="listing-card fade-in delay-3 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="assets/antwerp_loft_1778680867590.png" alt="Antwerp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Antwerp, BE</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.1</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Zuid</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Modekwartier Studio</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Mode</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Kunst</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Design</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€1,300</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+3</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 7: Copenhagen -->
+                <div class="listing-card fade-in delay-1 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=600&q=80" alt="Copenhagen" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Copenhagen, DK</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.5</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Vesterbro</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Noords Minimalistisch Appartement</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Architectuur</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Fietsen</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Tech</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€1,900</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_2_1778678273002.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+9</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 8: Rome -->
+                <div class="listing-card fade-in delay-2 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&q=80" alt="Rome" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Rome, IT</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.6</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Trastevere</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Historische Trastevere Loft</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Geschiedenis</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Gastronomie</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Kunst</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€1,600</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <img src="assets/user_profile_2_1778678273002.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 9: Paris -->
+                <div class="listing-card fade-in delay-3 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="assets/paris_studio_1778680881809.png" alt="Paris" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Paris, FR</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.3</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Le Marais</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Le Marais Kunstenaarsstudio</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Fotografie</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Literatuur</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Mode</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€2,200</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+7</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 10: New York -->
+                <div class="listing-card fade-in delay-1 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&q=80" alt="New York" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">New York, USA</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.2</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Williamsburg</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Brooklyn Startup Hub</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Startups</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Jazz</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Tech</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€3,500</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_2_1778678273002.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+21</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 11: Marrakesh -->
+                <div class="listing-card fade-in delay-2 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80" alt="Marrakesh" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Marrakesh, MA</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 8.9</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Medina</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Medina Riad Coliving</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Ambachten</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Wellness</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Nomads</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€800</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 12: Seoul -->
+                <div class="listing-card fade-in delay-3 bg-white rounded-xl overflow-hidden shadow-card hover:shadow-soft transition-all group cursor-pointer border border-gray-100 flex flex-col" onclick="window.location.href='listing.html'">
+                    <div class="card-image relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=600&q=80" alt="Seoul" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="card-tag absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-bold text-brand-navy shadow-sm">Seoul, KR</div>
+                        <div class="card-fav absolute top-4 right-4 bg-white p-2 rounded-full text-gray-300 hover:text-red-500 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <div class="community-score absolute bottom-4 left-4 bg-brand-navy text-brand-sand px-3 py-1 rounded-full text-xs font-bold shadow-sm">★ Community 9.5</div>
+                    </div>
+                    <div class="card-body p-6 flex-1 flex flex-col">
+                        <p class="card-location text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Gangnam</p>
+                        <h3 class="card-title font-display text-2xl font-bold text-brand-navy mb-3 group-hover:text-brand-sand transition-colors">Gangnam Tech Hub</h3>
+                        <div class="card-tags flex flex-wrap gap-2 mb-4">
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Gaming</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Streetfood</span>
+                            <span class="bg-brand-gray text-brand-navy text-xs px-2 py-1 rounded-md font-medium">Tech</span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-6 pt-0 mt-auto border-t border-gray-100 flex justify-between items-center bg-white">
+                        <div class="card-price pt-4">
+                            <span class="font-bold text-brand-navy text-xl">€1,500</span><span class="text-xs text-gray-500"> / mnd</span>
+                        </div>
+                        <div class="card-neighbors pt-4 flex items-center">
+                            <div class="flex -space-x-2">
+                                <img src="assets/user_profile_2_1778678273002.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <img src="assets/user_profile_1_1778678260407.png" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                                <div class="w-8 h-8 rounded-full border-2 border-white bg-brand-gray flex items-center justify-center text-[10px] font-bold text-brand-navy">+10</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-16 text-center">
+                <a href="matching.html" class="inline-flex items-center gap-2 bg-brand-navy text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all shadow-md">
+                    Bekijk alle locaties
+                </a>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Revenue Share Slide -->
+    <section class="py-24 bg-brand-navy text-white relative overflow-hidden">
+        <!-- Terugground decoration -->
+        <div class="absolute right-0 top-0 w-96 h-96 bg-brand-sand opacity-5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Left Column -->
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-8 h-px bg-brand-sand"></div>
+                        <span class="text-brand-sand font-bold text-xs tracking-widest uppercase">Revenue Share Systeem</span>
+                    </div>
+                    <h2 class="font-display text-4xl lg:text-6xl font-bold mb-6">Jouw woning werkt <span class="italic text-brand-sand font-normal">voor jou</span></h2>
+                    <p class="text-gray-300 text-lg mb-12 max-w-lg">
+                        Vertrek naar het buitenland en laat je woning rendement genereren. Volledig legaal, volledig geautomatiseerd.
+                    </p>
+                    
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="font-display text-4xl font-bold text-brand-sand">01</div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Verhuurder-toestemming regelen</h4>
+                                <p class="text-sm text-gray-400">Wij begeleiden het proces voor toestemming van je verhuurder of corporatie. Inclusief standaard-overeenkomsten die door meer dan 120 corporaties zijn goedgekeurd.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="font-display text-4xl font-bold text-brand-sand">02</div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Listing activeren</h4>
+                                <p class="text-sm text-gray-400">Upload foto's, stel je prijs in en kies je beschikbaarheidsperiode. Je listing gaat automatisch live zodra jij vertrekdatum bevestigt.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="font-display text-4xl font-bold text-brand-sand">03</div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Gescreende huurders</h4>
+                                <p class="text-sm text-gray-400">Alleen geverifieerde WonenZonderGrenzen-leden kunnen jouw woning huren. Automatische huurinkasso en schade-depositobeheer.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="font-display text-4xl font-bold text-brand-sand">04</div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Passief inkomen genereren</h4>
+                                <p class="text-sm text-gray-400">Maandelijkse uitbetalingen op je rekening. Gemiddeld dekt de huurinkomst 60-100% van jouw eigen verblijfskosten in het buitenland.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Calculator Widget -->
+                <div class="bg-[#1A2837] rounded-xl border border-gray-700 shadow-2xl overflow-hidden p-8">
+                    <p class="text-brand-sand text-xs font-bold tracking-widest uppercase mb-4">Voorbeeldberekening</p>
+                    <h3 class="font-display text-2xl font-bold mb-8">Jan de Vries &middot; Amsterdam &harr; Bali</h3>
+                    
+                    <div class="space-y-4 text-sm text-gray-300">
+                        <div class="flex justify-between items-center pb-4 border-b border-gray-700">
+                            <span>Huurwaarde Amsterdam</span>
+                            <span class="font-bold text-white">&euro;1.850 / mnd</span>
+                        </div>
+                        <div class="flex justify-between items-center pb-4 border-b border-gray-700">
+                            <span>Platform fee (12%)</span>
+                            <span class="font-bold text-white">&minus; &euro;222</span>
+                        </div>
+                        <div class="flex justify-between items-center pb-4 border-b border-gray-700">
+                            <span>Netto inkomsten</span>
+                            <span class="font-bold text-brand-success text-base">&euro;1.628 / mnd</span>
+                        </div>
+                        <div class="flex justify-between items-center pb-4 border-b border-gray-700">
+                            <span>Verblijf Bali (coliving)</span>
+                            <span class="font-bold text-white">&euro;950 / mnd</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-2 mb-8">
+                            <span>Netto voordeel per maand</span>
+                            <span class="font-bold text-brand-success text-base">+ &euro;678</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 bg-black bg-opacity-20 rounded-lg p-5 border border-gray-700">
+                        <p class="text-brand-sand text-xs font-bold tracking-widest uppercase mb-2">Conclusie</p>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            Jan verdient &euro;678/mnd extra terwijl hij in Bali woont. Zijn verblijf kost hem effectief nul.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-navy text-brand-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-2 md:col-span-1">
+                    <a href="#" class="font-display font-bold text-3xl tracking-tight mb-4 block text-brand-sand">WonenZonderGrenzen.</a>
+                    <p class="text-gray-400 text-sm max-w-xs">Een revolutie in long-term stays door community matching en veilige onderverhuur.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 font-display text-xl text-brand-sand">Ontdekken</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Steden</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Communities</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Hoe het werkt</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 font-display text-xl text-brand-sand">Verhuren</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Verhuur je woning</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Verhuurder Goedkeuring</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Vertrouwen & Veiligheid</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 font-display text-xl text-brand-sand">Bedrijf</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Over Ons</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Werken bij</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-gray-800 text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2026 WonenZonderGrenzen Platform. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-gray-300">Privacy</a>
+                    <a href="#" class="hover:text-gray-300">Voorwaarden</a>
+                    <a href="#" class="hover:text-gray-300">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Intersection Observer for Fade-In Animation and Navbar Scroll -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Navbar Shrink Effect
+            const nav = document.getElementById('main-nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 60) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            // Fade In Animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            // Initially remove the fade-in class so they can be triggered
+            document.querySelectorAll('.listing-card').forEach((card) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
